@@ -27,7 +27,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var position;
+  double position = 0;
+
+  newXPosition(){
+    position = 0.8;
+    setState(() {
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,57 +42,56 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Stack(children: [
-        Container(
-          color: Colors.blue,
-        ),
-        Align(
-          alignment: AlignmentDirectional.bottomStart,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height * 0.85,
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Stack(
-                  children: [
-                    Container(
-                      color: Colors.black,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.05,
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical : 20),
-                                child: Container(
-                                  color: Colors.black,
-                                  height: MediaQuery.of(context).size.height * 0.02,
-                                  width: MediaQuery.of(context).size.width * 0.1,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      
-                                    },
-                                  ),
-                                ),
+      body: Stack(
+        children: [
+          Container(color: Colors.blue),
+          Align(
+            alignment: AlignmentDirectional.bottomStart,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  color: Colors.white,
+                  height: MediaQuery.of(context).size.height * 0.85,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Stack(
+                    children: [
+                      Ball(),
+                      GestureDetector(
+                        onTap: () => newXPosition(),
+                        child: Align(
+                          alignment: Alignment(position, 0.95),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Container(
+                              color: Colors.black,
+                              height: MediaQuery.of(context).size.height * 0.02,
+                              width: MediaQuery.of(context).size.width * 0.1,
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )
         ],
       ),
+    );
+  }
+}
+
+class Ball extends StatelessWidget {
+  const Ball({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
+      height: MediaQuery.of(context).size.height * 0.05,
+      width: MediaQuery.of(context).size.width * 0.05,
     );
   }
 }
