@@ -62,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: double.infinity,
                         child: Row(
                           children: [
-                            
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical : 20),
                                 child: Container(
@@ -75,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     },
                                   ),
                                 ),
-                              
                             ),
                           ],
                         ),
