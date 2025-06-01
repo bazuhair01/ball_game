@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,14 +16,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -29,19 +31,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   double position = 0;
 
-  newXPosition(){
-    position = 0.8;
-    setState(() {
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Stack(
         children: [
           Container(color: Colors.blue),
@@ -54,25 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                   height: MediaQuery.of(context).size.height * 0.85,
                   width: MediaQuery.of(context).size.width * 0.9,
-                  child: Stack(
-                    children: [
-                      Ball(),
-                      GestureDetector(
-                        onTap: () => newXPosition(),
-                        child: Align(
-                          alignment: Alignment(position, 0.95),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Container(
-                              color: Colors.black,
-                              height: MediaQuery.of(context).size.height * 0.02,
-                              width: MediaQuery.of(context).size.width * 0.1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: Stack(children: [Ball(), Player(position: position)]),
                 ),
               ],
             ),
@@ -83,15 +57,69 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Ball extends StatelessWidget {
+class Ball extends StatefulWidget {
   const Ball({super.key});
 
   @override
+  State<Ball> createState() => _BallState();
+}
+
+class _BallState extends State<Ball> {
+  double newPostion = 0.0;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      height: MediaQuery.of(context).size.height * 0.05,
-      width: MediaQuery.of(context).size.width * 0.05,
+    Future.delayed(Duration(seconds: 1), () {
+      newPostion += 0.1;
+    });
+    setState(() {});
+    return Align(
+      alignment: Alignment(0, newPostion),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        child: Container(
+          color: Colors.black,
+          height: MediaQuery.of(context).size.height * 0.03,
+          width: MediaQuery.of(context).size.width * 0.04,
+        ),
+      ),
+    );
+  }
+}
+
+class Player extends StatefulWidget {
+  Player({super.key, this.position = 0.0});
+  double position;
+
+  @override
+  State<Player> createState() => _PlayerState();
+}
+
+class _PlayerState extends State<Player> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        setState(() {
+          double dxInAlignmentUnits =
+              (details.delta.dx /
+                  (MediaQuery.of(context).size.width -
+                      MediaQuery.of(context).size.width * 0.1)) *
+              2.0;
+          widget.position += dxInAlignmentUnits;
+        });
+      },
+      child: Align(
+        alignment: Alignment(widget.position, 0.95),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Container(
+            color: Colors.black,
+            height: MediaQuery.of(context).size.height * 0.02,
+            width: MediaQuery.of(context).size.width * 0.1,
+          ),
+        ),
+      ),
     );
   }
 }
