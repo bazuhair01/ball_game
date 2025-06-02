@@ -1,5 +1,5 @@
-import 'dart:async';
-
+import 'package:ball_game/ball.dart';
+import 'package:ball_game/player.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -54,82 +54,4 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Ball extends StatefulWidget {
-  const Ball({super.key});
 
-  @override
-  State<Ball> createState() => _BallState();
-}
-
-class _BallState extends State<Ball> {
-  double newPostion = 0.0;
-
-  @override
-  Widget build(BuildContext context) {
-    Timer.periodic(Duration(milliseconds: 200), (timer) {
-      setState(() {
-        newPostion += 0.01;
-      });
-    });
-    return GestureDetector(
-      onTap: () {},
-      child: Align(
-        alignment: Alignment(0, newPostion),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          child: Container(
-            color: Colors.black,
-            height: MediaQuery.of(context).size.height * 0.03,
-            width: MediaQuery.of(context).size.width * 0.04,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Player extends StatefulWidget {
-  Player({super.key, this.position = 0.0});
-  double position;
-
-  @override
-  State<Player> createState() => _PlayerState();
-}
-
-class _PlayerState extends State<Player> {
-  double forValidtion = 0;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragUpdate: (details) {
-        setState(() {
-          double dxInAlignmentUnits =
-              (details.delta.dx /
-                  (MediaQuery.of(context).size.width -
-                      MediaQuery.of(context).size.width * 0.1)) *
-              2.0;
-
-          forValidtion += dxInAlignmentUnits;
-          if (forValidtion >= 1) {
-            widget.position = 1;
-          } else if (forValidtion <= -1) {
-            widget.position = -1;
-          } else {
-            widget.position += dxInAlignmentUnits;
-          }
-        });
-      },
-      child: Align(
-        alignment: Alignment(widget.position, 0.95),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Container(
-            color: Colors.black,
-            height: MediaQuery.of(context).size.height * 0.02,
-            width: MediaQuery.of(context).size.width * 0.1,
-          ),
-        ),
-      ),
-    );
-  }
-}
