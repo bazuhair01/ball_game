@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class Player extends StatefulWidget {
   Player({super.key, this.position = 0.0});
   double position;
-
   @override
   State<Player> createState() => _PlayerState();
 }
@@ -20,7 +19,6 @@ class _PlayerState extends State<Player> {
                   (MediaQuery.of(context).size.width -
                       MediaQuery.of(context).size.width * 0.1)) *
               2.0;
-
           forValidtion += dxInAlignmentUnits;
           if (forValidtion >= 1) {
             widget.position = 1;
