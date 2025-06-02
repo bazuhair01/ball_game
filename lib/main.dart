@@ -1,7 +1,6 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,26 +32,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(color: Colors.blue),
-          Align(
-            alignment: AlignmentDirectional.bottomStart,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height * 0.85,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: Stack(children: [Ball(), Player(position: position)]),
-                ),
-              ],
-            ),
+    return Stack(
+      children: [
+        Container(color: Colors.blue),
+        Align(
+          alignment: AlignmentDirectional.bottomStart,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * 0.85,
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Stack(children: [Ball(), Player(position: position)]),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -69,18 +66,22 @@ class _BallState extends State<Ball> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 1), () {
-      newPostion += 0.1;
+    Timer.periodic(Duration(milliseconds: 200), (timer) {
+      setState(() {
+        newPostion += 0.01;
+      });
     });
-    setState(() {});
-    return Align(
-      alignment: Alignment(0, newPostion),
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        child: Container(
-          color: Colors.black,
-          height: MediaQuery.of(context).size.height * 0.03,
-          width: MediaQuery.of(context).size.width * 0.04,
+    return GestureDetector(
+      onTap: () {},
+      child: Align(
+        alignment: Alignment(0, newPostion),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          child: Container(
+            color: Colors.black,
+            height: MediaQuery.of(context).size.height * 0.03,
+            width: MediaQuery.of(context).size.width * 0.04,
+          ),
         ),
       ),
     );
@@ -96,6 +97,7 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
+  double forValidtion = 0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -106,7 +108,15 @@ class _PlayerState extends State<Player> {
                   (MediaQuery.of(context).size.width -
                       MediaQuery.of(context).size.width * 0.1)) *
               2.0;
-          widget.position += dxInAlignmentUnits;
+
+          forValidtion += dxInAlignmentUnits;
+          if (forValidtion >= 1) {
+            widget.position = 1;
+          } else if (forValidtion <= -1) {
+            widget.position = -1;
+          } else {
+            widget.position += dxInAlignmentUnits;
+          }
         });
       },
       child: Align(
