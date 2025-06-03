@@ -44,7 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 height: MediaQuery.of(context).size.height * 0.85,
                 width: MediaQuery.of(context).size.width * 0.9,
-                child: Stack(children: [Ball(), Player(position: position)]),
+                child: Stack(
+                  children: [StartGame(), Ball(), Player(position: position)],
+                ),
               ),
             ],
           ),
@@ -54,4 +56,33 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class StartGame extends StatefulWidget {
+  StartGame({super.key, this.isStart = false});
+  bool isStart;
 
+  @override
+  State<StartGame> createState() => _StartGameState();
+}
+
+class _StartGameState extends State<StartGame> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.isStart
+        ? SizedBox.shrink()
+        : GestureDetector(
+          onTap: () {
+            widget.isStart = true;
+            setState(() {});
+          },
+          child: Align(
+            alignment: Alignment(0, 1),
+            child: Center(
+              child: Text(
+                "Tap To Start The Game",
+                style: TextStyle(color: Colors.black, fontSize: 12),
+              ),
+            ),
+          ),
+        );
+  }
+}
