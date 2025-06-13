@@ -16,7 +16,7 @@ class _BallState extends State<Ball> {
   Widget build(BuildContext context) {
     Timer.periodic(Duration(milliseconds: 1000), (timer) {
       setState(() {
-        newPostion += 0.001;
+        newPostion += 0.01;
       });
     });
     return GestureDetector(
